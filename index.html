@@ -1,17 +1,352 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carta de Amor 💌</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --bg-cream: #fff5f7;
+            --pink-light: #ffe0e9;
+            --pink-medium: #ffb3c6;
+            --pink-dark: #ff4d6d;
+            --border-dark: #592e38;
+            --text-dark: #3d1e26;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-cream);
+            color: var(--text-dark);
+            font-family: 'VT323', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .floating-hearts {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-heart {
+            position: absolute;
+            color: var(--pink-medium);
+            opacity: 0.45;
+            animation: floatHeart linear infinite;
+        }
+
+        @keyframes floatHeart {
+            0% { transform: translateY(105vh) rotate(0deg); }
+            100% { transform: translateY(-10vh) rotate(360deg); }
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            z-index: 1;
+        }
+
+        .screen.active {
+            display: flex;
+            animation: popIn 0.4s ease;
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.92); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .envelope-wrapper {
+            text-align: center;
+            margin-bottom: 90px;
+            transition: transform 0.3s;
+        }
+
+        .envelope-wrapper.hit {
+            transform: scale(1.12);
+        }
+
+        .envelope {
+            width: 180px;
+            height: 120px;
+            background: #ffc2d1;
+            border: 3px solid var(--border-dark);
+            border-radius: 8px;
+            margin: 0 auto 20px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 87px solid transparent;
+            border-right: 87px solid transparent;
+            border-top: 65px solid #ff8fab;
+        }
+
+        .envelope-seal {
+            position: relative;
+            z-index: 2;
+            background: var(--pink-dark);
+            color: white;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            border: 2px solid var(--border-dark);
+            margin-top: 10px;
+        }
+
+        .main-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.15rem;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .bow-area {
+            text-align: center;
+            position: relative;
+        }
+
+        .bow-container {
+            width: 160px;
+            height: 110px;
+            margin: 0 auto;
+            position: relative;
+            cursor: grab;
+            touch-action: none;
+        }
+
+        .bow-container:active {
+            cursor: grabbing;
+        }
+
+        .bow-svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .arrow {
+            position: absolute;
+            left: 50%;
+            top: 15px;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .arrow-head {
+            color: var(--pink-dark);
+            font-size: 1.2rem;
+            line-height: 0.8;
+        }
+
+        .arrow-shaft {
+            width: 4px;
+            height: 65px;
+            background: #7a442a;
+        }
+
+        .arrow-tail {
+            color: var(--pink-dark);
+            font-size: 1rem;
+            line-height: 0.8;
+        }
+
+        .instruction {
+            margin-top: 24px;
+            font-size: 1.3rem;
+            color: #8c4a58;
+        }
+
+        .retro-window {
+            width: 100%;
+            background: #fff0f3;
+            border: 3px solid var(--border-dark);
+            border-radius: 8px;
+            box-shadow: 8px 8px 0px rgba(89, 46, 56, 0.25);
+            overflow: hidden;
+        }
+
+        .window-header {
+            background: #ffc2d1;
+            border-bottom: 3px solid var(--border-dark);
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .window-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.75rem;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 6px;
+        }
+
+        .window-controls span {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 20px;
+            height: 20px;
+            background: #fff0f3;
+            border: 2px solid var(--border-dark);
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .window-subbar {
+            background: #ffe5ec;
+            border-bottom: 2px solid var(--border-dark);
+            padding: 4px;
+            text-align: center;
+            color: var(--pink-dark);
+            letter-spacing: 8px;
+            font-size: 0.9rem;
+        }
+
+        .window-body {
+            padding: 28px 20px;
+            text-align: center;
+            position: relative;
+            min-height: 360px;
+            background-color: #fff5f7;
+            background-image: 
+                linear-gradient(90deg, rgba(255, 179, 198, 0.35) 50%, transparent 50%),
+                linear-gradient(rgba(255, 179, 198, 0.35) 50%, transparent 50%);
+            background-size: 28px 28px;
+        }
+
+        .question-text {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .pixel-cat {
+            width: 120px;
+            height: 112px;
+            margin: 0 auto 24px;
+            transition: transform 0.3s;
+        }
+
+        .pixel-cat.happy {
+            animation: catBounce 0.5s infinite alternate;
+        }
+
+        @keyframes catBounce {
+            from { transform: translateY(0) scale(1.05); }
+            to { transform: translateY(-10px) scale(1.1); }
+        }
+
+        .buttons-area {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            min-height: 50px;
+        }
+
+        .pixel-btn {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.85rem;
+            padding: 12px 24px;
+            border: 3px solid var(--border-dark);
+            box-shadow: 4px 4px 0px var(--border-dark);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .pixel-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--border-dark);
+        }
+
+        .btn-yes {
+            background: #ff758f;
+            color: white;
+        }
+
+        .btn-yes:hover {
+            background: #ff4d6d;
+        }
+
+        .btn-no {
+            background: #ffffff;
+            color: var(--text-dark);
+            position: relative;
+            transition: left 0.2s ease, top 0.2s ease;
+            z-index: 10;
+        }
+
+        .final-message {
+            font-size: 1.45rem;
+            line-height: 1.4;
+            background: rgba(255, 255, 255, 0.88);
+            padding: 12px 16px;
+            border: 2px dashed var(--pink-dark);
+            border-radius: 6px;
+            margin-top: 10px;
+            animation: popIn 0.5s ease;
+        }
+
+        .rain-heart {
+            position: fixed;
+            top: -30px;
+            font-size: 1.6rem;
+            pointer-events: none;
+            z-index: 100;
+            animation: fallDown linear forwards;
+        }
+
+        @keyframes fallDown {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+    </style>
 </head>
 <body>
 
     <div class="floating-hearts" id="heartsBg"></div>
 
-    <!-- ECRÃ 1: Envelope e Arco do Cupido -->
     <main class="screen active" id="screen-envelope">
         <div class="envelope-wrapper" id="envelopeTarget">
             <div class="envelope">
@@ -23,26 +358,21 @@
 
         <div class="bow-area" id="bowArea">
             <div class="bow-container" id="bowContainer">
-                <!-- Arco SVG -->
                 <svg class="bow-svg" viewBox="0 0 160 100">
-                    <!-- Madeira do arco -->
                     <path d="M 15 75 Q 80 5 145 75" fill="none" stroke="#9c5a3c" stroke-width="8" stroke-linecap="round"/>
                     <path d="M 15 75 Q 80 5 145 75" fill="none" stroke="#c87d55" stroke-width="3" stroke-linecap="round"/>
-                    <!-- Corda elástica -->
                     <polyline id="bowString" points="15,75 80,75 145,75" fill="none" stroke="#7a442a" stroke-width="2.5"/>
                 </svg>
-                <!-- Flecha -->
                 <div class="arrow" id="arrow">
                     <div class="arrow-head">▲</div>
                     <div class="arrow-shaft"></div>
                     <div class="arrow-tail">❤</div>
                 </div>
             </div>
-            <p class="instruction">Puxa e larga para disparar a flecha do Cupido 🏹</p>
+            <p class="instruction">Puxe e solte para disparar a flecha do Cupido 🏹</p>
         </div>
     </main>
 
-    <!-- ECRÃ 2: Janela Retro "LOVE" -->
     <main class="screen" id="screen-window">
         <div class="retro-window">
             <div class="window-header">
@@ -59,23 +389,16 @@
             </div>
 
             <div class="window-body" id="windowBody">
-                <h2 class="question-text" id="questionText">Feliz 1 mês, meu amor! Ainda me amas?</h2>
+                <h2 class="question-text" id="questionText">Feliz 1 mês, meu amor! Ainda me ama?</h2>
 
-                <!-- Gatinho Pixel Art em SVG -->
                 <div class="pixel-cat" id="pixelCat">
                     <svg viewBox="0 0 16 15" shape-rendering="crispEdges">
-                        <!-- Orelhas e Cabeça -->
                         <path fill="#1e191a" d="M2 1h2v2H2zm10 0h2v2h-2zM2 3h12v9H2zm1 9h10v2H3z"/>
-                        <!-- Interior das orelhas -->
                         <path fill="#ff8fab" d="M3 2h1v1H3zm9 0h1v1h-1z"/>
-                        <!-- Olhos -->
                         <path fill="#ffffff" d="M4 6h2v2H4zm6 0h2v2h-2z"/>
                         <path fill="#1e191a" d="M5 6h1v2H5zm6 0h1v2h-1z"/>
-                        <!-- Bochechas -->
                         <path fill="#ff758f" d="M3 8h2v1H3zm8 0h2v1h-2z"/>
-                        <!-- Coração segurado pelo gato -->
                         <path fill="#ff2a5f" d="M5 10h2v1H5zm4 0h2v1H9zM4 11h8v2H4zm1 2h6v1H5zm1 1h4v1H6zm1 1h2v1H7z"/>
-                        <!-- Patinhas -->
                         <path fill="#383032" d="M4 11h2v2H4zm6 0h2v2h-2z"/>
                     </svg>
                 </div>
@@ -86,12 +409,127 @@
                 </div>
 
                 <p class="final-message" id="finalMessage" style="display: none;">
-                    Um mês juntos e uma vida inteira pela frente. Feliz um mês pra nós dois, meu amor! ❤️
+                    Um mês juntos e uma vida inteira pela frente. Feliz aniversário, meu amor! ❤️
                 </p>
             </div>
         </div>
     </main>
 
-    <script src="script.js"></script>
+    <script>
+        const heartsBg = document.getElementById('heartsBg');
+        for (let i = 0; i < 18; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'bg-heart';
+            heart.innerText = '❤';
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.fontSize = `${Math.random() * 16 + 12}px`;
+            heart.style.animationDuration = `${Math.random() * 6 + 6}s`;
+            heart.style.animationDelay = `${Math.random() * 5}s`;
+            heartsBg.appendChild(heart);
+        }
+
+        const bowContainer = document.getElementById('bowContainer');
+        const bowString = document.getElementById('bowString');
+        const arrow = document.getElementById('arrow');
+        const envelopeTarget = document.getElementById('envelopeTarget');
+
+        let isDragging = false;
+        let startY = 0;
+        let pullDistance = 0;
+
+        function startPull(clientY) {
+            isDragging = true;
+            startY = clientY;
+        }
+
+        function movePull(clientY) {
+            if (!isDragging) return;
+            pullDistance = Math.max(0, Math.min(clientY - startY, 65));
+            const stringY = 75 + pullDistance;
+            bowString.setAttribute('points', `15,75 80,${stringY} 145,75`);
+            arrow.style.transform = `translate(-50%, ${pullDistance}px)`;
+        }
+
+        function releaseArrow() {
+            if (!isDragging) return;
+            isDragging = false;
+            bowString.setAttribute('points', '15,75 80,75 145,75');
+
+            if (pullDistance > 20) {
+                arrow.style.transition = 'transform 0.35s cubic-bezier(0.25, 1, 0.5, 1)';
+                arrow.style.transform = 'translate(-50%, -240px)';
+
+                setTimeout(() => {
+                    envelopeTarget.classList.add('hit');
+                }, 250);
+
+                setTimeout(() => {
+                    document.getElementById('screen-envelope').classList.remove('active');
+                    document.getElementById('screen-window').classList.add('active');
+                }, 750);
+            } else {
+                arrow.style.transition = 'transform 0.2s ease';
+                arrow.style.transform = 'translate(-50%, 0px)';
+                setTimeout(() => { arrow.style.transition = 'none'; }, 200);
+            }
+            pullDistance = 0;
+        }
+
+        bowContainer.addEventListener('mousedown', (e) => startPull(e.clientY));
+        window.addEventListener('mousemove', (e) => movePull(e.clientY));
+        window.addEventListener('mouseup', releaseArrow);
+
+        bowContainer.addEventListener('touchstart', (e) => startPull(e.touches[0].clientY));
+        window.addEventListener('touchmove', (e) => movePull(e.touches[0].clientY));
+        window.addEventListener('touchend', releaseArrow);
+
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const windowBody = document.getElementById('windowBody');
+
+        function moveNoButton() {
+            const bodyRect = windowBody.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+
+            const maxX = bodyRect.width - btnRect.width - 20;
+            const maxY = bodyRect.height - btnRect.height - 20;
+
+            const randomX = Math.max(10, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = `${randomX}px`;
+            noBtn.style.top = `${randomY}px`;
+        }
+
+        noBtn.addEventListener('mouseover', moveNoButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveNoButton();
+        });
+
+        yesBtn.addEventListener('click', () => {
+            document.getElementById('questionText').innerText = 'Ebaaa! Eu te amo! ❤️';
+            document.getElementById('buttonsArea').style.display = 'none';
+            document.getElementById('finalMessage').style.display = 'block';
+            document.getElementById('pixelCat').classList.add('happy');
+
+            startHeartRain();
+        });
+
+        function startHeartRain() {
+            const emojis = ['❤️', '💖', '💕', '💗', '💓'];
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'rain-heart';
+                heart.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                document.body.appendChild(heart);
+
+                setTimeout(() => heart.remove(), 4000);
+            }, 120);
+        }
+    </script>
 </body>
 </html>
