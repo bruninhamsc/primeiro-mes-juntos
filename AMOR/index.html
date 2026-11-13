@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta de Amor 💌</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/AMOR/style.css">
+</head>
+<body>
+
+    <div class="floating-hearts" id="heartsBg"></div>
+
+    <!-- ECRÃ 1: Envelope e Arco do Cupido -->
+    <main class="screen active" id="screen-envelope">
+        <div class="envelope-wrapper" id="envelopeTarget">
+            <div class="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-seal">❤</div>
+            </div>
+            <h1 class="main-title">Feliz 1 Mês! 💌</h1>
+        </div>
+
+        <div class="bow-area" id="bowArea">
+            <div class="bow-container" id="bowContainer">
+                <!-- Arco SVG -->
+                <svg class="bow-svg" viewBox="0 0 160 100">
+                    <!-- Madeira do arco -->
+                    <path d="M 15 75 Q 80 5 145 75" fill="none" stroke="#9c5a3c" stroke-width="8" stroke-linecap="round"/>
+                    <path d="M 15 75 Q 80 5 145 75" fill="none" stroke="#c87d55" stroke-width="3" stroke-linecap="round"/>
+                    <!-- Corda elástica -->
+                    <polyline id="bowString" points="15,75 80,75 145,75" fill="none" stroke="#7a442a" stroke-width="2.5"/>
+                </svg>
+                <!-- Flecha -->
+                <div class="arrow" id="arrow">
+                    <div class="arrow-head">▲</div>
+                    <div class="arrow-shaft"></div>
+                    <div class="arrow-tail">❤</div>
+                </div>
+            </div>
+            <p class="instruction">Puxa e larga para disparar a flecha do Cupido 🏹</p>
+        </div>
+    </main>
+
+    <!-- ECRÃ 2: Janela Retro "LOVE" -->
+    <main class="screen" id="screen-window">
+        <div class="retro-window">
+            <div class="window-header">
+                <span class="window-title">LOVE.EXE</span>
+                <div class="window-controls">
+                    <span>-</span>
+                    <span>□</span>
+                    <span>×</span>
+                </div>
+            </div>
+
+            <div class="window-subbar">
+                <span>❤</span><span>❤</span><span>❤</span>
+            </div>
+
+            <div class="window-body" id="windowBody">
+                <h2 class="question-text" id="questionText">Feliz 1 mês, meu amor! Ainda me amas?</h2>
+
+                <!-- Gatinho Pixel Art em SVG -->
+                <div class="pixel-cat" id="pixelCat">
+                    <svg viewBox="0 0 16 15" shape-rendering="crispEdges">
+                        <!-- Orelhas e Cabeça -->
+                        <path fill="#1e191a" d="M2 1h2v2H2zm10 0h2v2h-2zM2 3h12v9H2zm1 9h10v2H3z"/>
+                        <!-- Interior das orelhas -->
+                        <path fill="#ff8fab" d="M3 2h1v1H3zm9 0h1v1h-1z"/>
+                        <!-- Olhos -->
+                        <path fill="#ffffff" d="M4 6h2v2H4zm6 0h2v2h-2z"/>
+                        <path fill="#1e191a" d="M5 6h1v2H5zm6 0h1v2h-1z"/>
+                        <!-- Bochechas -->
+                        <path fill="#ff758f" d="M3 8h2v1H3zm8 0h2v1h-2z"/>
+                        <!-- Coração segurado pelo gato -->
+                        <path fill="#ff2a5f" d="M5 10h2v1H5zm4 0h2v1H9zM4 11h8v2H4zm1 2h6v1H5zm1 1h4v1H6zm1 1h2v1H7z"/>
+                        <!-- Patinhas -->
+                        <path fill="#383032" d="M4 11h2v2H4zm6 0h2v2h-2z"/>
+                    </svg>
+                </div>
+
+                <div class="buttons-area" id="buttonsArea">
+                    <button class="pixel-btn btn-yes" id="yesBtn">SIM</button>
+                    <button class="pixel-btn btn-no" id="noBtn">NÃO</button>
+                </div>
+
+                <p class="final-message" id="finalMessage" style="display: none;">
+                    Um mês juntos e uma vida inteira pela frente. Feliz um mês pra nós dois, meu amor! ❤️
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script src="/AMOR/script.js"></script>
+</body>
+</html>
